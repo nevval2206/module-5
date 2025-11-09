@@ -5,7 +5,7 @@ from requests.exceptions import Timeout, RequestException
 
 # --- Parameters ---
 num_requests = 1000  # Total number of requests
-timeout_seconds = 1  # Timeout for each request (seconds)
+timeout_seconds = 0.5  # Timeout for each request (seconds) - fast for presentation
 strategies = ["GET", "POST"]
 endpoints = ["data-03", "data-04", "data-05"]
 

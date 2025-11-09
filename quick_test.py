@@ -3,11 +3,11 @@ import random
 import time
 from requests.exceptions import Timeout, RequestException
 
-# --- Parameters ---
-num_requests = 1000  # Total number of requests
-timeout_seconds = 1  # Timeout for each request (seconds)
-strategies = ["GET", "POST"]
-endpoints = ["data-03", "data-04", "data-05"]
+# --- Quick Test Parameters ---
+num_requests = 50  # Reduced for quick testing
+timeout_seconds = 0.5  # Timeout for each request (seconds) - fast for presentation
+strategies = ["GET"]  # Just GET for quick test
+endpoints = ["data-05"]  # Just one endpoint with highest timeout rate (20%)
 
 # --- Results Dictionary ---
 results = {}
@@ -43,11 +43,13 @@ for endpoint in endpoints:
         packet_losses = 0
         errors = 0
 
-        print(f"\nTesting {strategy} requests for {endpoint}...")
+        print(f"\nTesting {strategy} requests for {endpoint} (quick test - {num_requests} requests)...")
         start_time = time.time()
 
         for i in range(num_requests):
+            print(f"Request {i+1}/{num_requests}...", end=" ")
             result = make_request(strategy, endpoint, timeout_seconds)
+            print(f"Result: {result}")
 
             if result == "success":
                 successes += 1
@@ -57,9 +59,6 @@ for endpoint in endpoints:
                 packet_losses += 1
             else:
                 errors += 1
-
-            if (i + 1) % 100 == 0:
-                print(f"Processed {i + 1} requests...")
 
         total_time = time.time() - start_time
 
@@ -73,14 +72,14 @@ for endpoint in endpoints:
         }
 
 # Print Results
-print("\n=== Request Testing Results ===")
+print("\n=== Quick Test Results ===")
 for endpoint in endpoints:
     print(f"\n--- Results for {endpoint} ---")
     for strategy, metrics in results[endpoint].items():
         print(f"\nStrategy: {strategy}")
-        print(f"Success Rate: {metrics['success_rate']:.4f}")
-        print(f"Timeout Rate: {metrics['timeout_rate']:.4f}")
-        print(f"Packet Loss Rate: {metrics['packet_loss_rate']:.4f}")
-        print(f"Error Rate: {metrics['error_rate']:.4f}")
+        print(f"Success Rate: {metrics['success_rate']:.4f} ({successes}/{num_requests})")
+        print(f"Timeout Rate: {metrics['timeout_rate']:.4f} ({timeouts}/{num_requests})")
+        print(f"Packet Loss Rate: {metrics['packet_loss_rate']:.4f} ({packet_losses}/{num_requests})")
+        print(f"Error Rate: {metrics['error_rate']:.4f} ({errors}/{num_requests})")
         print(f"Total Time: {metrics['total_time']:.2f} seconds")
         print(f"Requests/second: {metrics['requests_per_second']:.2f}")
