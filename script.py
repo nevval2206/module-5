@@ -4,7 +4,7 @@ import time
 from requests.exceptions import Timeout, RequestException
 
 # --- Parameters ---
-num_requests = 1000  # Total number of requests
+num_requests = 100  # Total number of requests
 timeout_seconds = 0.5  # Timeout for each request (seconds) - fast for presentation
 strategies = ["GET", "POST"]
 endpoints = ["data-03", "data-04", "data-05"]
@@ -58,7 +58,7 @@ for endpoint in endpoints:
             else:
                 errors += 1
 
-            if (i + 1) % 100 == 0:
+            if (i + 1) % 10 == 0:
                 print(f"Processed {i + 1} requests...")
 
         total_time = time.time() - start_time
